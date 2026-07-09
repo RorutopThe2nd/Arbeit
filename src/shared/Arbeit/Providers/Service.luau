@@ -18,6 +18,8 @@ export type ServiceDef = {
 	[string]: any,
 	OnStart: (() -> ())?,
 	OnTick: ((dt: number) -> ())?,
+	OnPhysics: ((time: number, dt: number) -> ())?,
+	OnRender: ((dt: number) -> ())?,
 	OnDestroy: (() -> ())?,
 }
 

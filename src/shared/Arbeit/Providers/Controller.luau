@@ -20,6 +20,8 @@ export type ControllerDef = {
 	OnInit: (() -> ())?,
 	OnStart: (() -> ())?,
 	OnTick: ((dt: number) -> ())?,
+	OnPhysics: ((time: number, dt: number) -> ())?,
+	OnRender: ((dt: number) -> ())?,
 	OnDestroy: (() -> ())?,
 }
 

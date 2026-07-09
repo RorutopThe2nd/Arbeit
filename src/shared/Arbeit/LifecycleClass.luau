@@ -15,6 +15,7 @@ type ILifecycle<A...> = {
 	_fnIndexes:{[Fn<A...>]: FnIndexEntry<A...> }
 }
 export type Lifecycle<A...> = ILifecycle<A...> & {
+	initBucket:(self:Lifecycle<A...>,bucket:number)->(),
 	rebuildBuckets: (self: Lifecycle<A...>) -> (),
 	subscribe: (self: Lifecycle<A...>, bucket: number, fn: Fn<A...>) -> () ,
 	unsubscribe: (self: Lifecycle<A...>, bucket: number, entry: Fn<A...> )->(),
@@ -38,12 +39,16 @@ function LifecycleClass.new<A...>(name: string): Lifecycle<A...>
 	return self
 end
 
+function LifecycleClass.initBucket<A...>(self:Lifecycle<A...>,bucket:number)
+	self.buckets[bucket] = self.buckets[bucket] or Sparse.SparseMap.new<<Fn<A...>>>()
+end
+
 function LifecycleClass.rebuildBuckets<A...>(self: Lifecycle<A...>) -- called after initiation of Service,Controller, and Component are finished inside the loader
 	self.bucketIndices = utils.getActiveIndices(self.buckets)
 end
 
 function LifecycleClass.subscribe<A...>(self: Lifecycle<A...>, bucket: number, fn: Fn<A...>)
-	self.buckets[bucket] = self.buckets[bucket] or Sparse.SparseMap.new<<Fn<A...>>>()
+	self:initBucket(bucket)
 
 	local entry = Sparse.SparseEntry.new(fn)
 	self.buckets[bucket]:add(entry)
@@ -64,7 +69,12 @@ function LifecycleClass.fireAll<A...>(self: Lifecycle<A...>, ...: A...) -- Surel
 		local bucketMap = self.buckets[bucket]
 		assert(bucketMap, `Missing bucket {bucket}`)
 		for _, entry in bucketMap.dense do
-			entry.value(...)
+			task.spawn(function(...)
+				local ok, err = pcall(entry.value,...)
+				if not ok then
+					warn(`Lifecycle {self.name} callback error: {err}`)
+				end
+			end, ...)
 		end
 	end
 end

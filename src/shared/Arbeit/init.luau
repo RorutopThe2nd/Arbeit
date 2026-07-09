@@ -41,6 +41,8 @@ function Arbeit.work()
 
 	local providersBucket: { [number]: { Controller.Controller | Service.Service } } = {}
 
+	local registeredLifecycles: { [LifecycleClass.Lifecycle<...any>]: true } = {}
+
 	for _, dir in _paths do
 		for _, inst in dir:GetDescendants() do
 			if inst:IsA("ModuleScript") then
@@ -60,6 +62,12 @@ function Arbeit.work()
 						end
 
 						Arbeit.register(decor.className, mod)
+
+						if mod._lifecycles then
+							for _, lifecycle: LifecycleClass.Lifecycle<...any> in mod._lifecycles do
+								registeredLifecycles[lifecycle] = true
+							end
+						end
 
 						mod:init()
 
@@ -82,12 +90,30 @@ function Arbeit.work()
 				local fn: any = provider.def[lifecycle.name]
 
 				if lifecycle == Lifecycles.OnStart then
-					fn()
+					task.spawn(fn)
 				elseif lifecycle ~= Lifecycles.OnInit and lifecycle ~= Lifecycles.OnDestroy then
 					lifecycle:subscribe(bucket, fn)
 				end
 			end
 		end
+	end
+
+	for lifecycle, _ in registeredLifecycles do
+		lifecycle:rebuildBuckets()
+	end
+
+	RunService.Heartbeat:Connect(function(dt: number)
+		Lifecycles.OnTick:fireAll(dt)
+	end)
+
+	RunService.Stepped:Connect(function(time: number, dt: number)
+		Lifecycles.OnPhysics:fireAll(time, dt)
+	end)
+
+	if RunService:IsClient() then
+		RunService.RenderStepped:Connect(function(dt: number)
+			Lifecycles.OnRender:fireAll(dt)
+		end)
 	end
 end
 

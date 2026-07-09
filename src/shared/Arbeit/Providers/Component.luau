@@ -41,6 +41,8 @@ export type ComponentDef<T, Attrs> = {
 	OnComponentInit: ((component: ComponentInstance<T, Attrs, any>) -> ())?,
 	OnStart: ((component: ComponentInstance<T, Attrs, any>) -> ())?,
 	OnTick: ((component: ComponentInstance<T, Attrs, any>, dt: number) -> ())?,
+	OnPhysics: ((component: ComponentInstance<T, Attrs, any>, time: number, dt: number) -> ())?,
+	OnRender: ((component: ComponentInstance<T, Attrs, any>, dt: number) -> ())?,
 	OnDestroy: ((component: ComponentInstance<T, Attrs, any>) -> ())?,
 }
 type IComponent<T, Attrs> = {
@@ -200,6 +202,12 @@ function Component.init<T, Attrs>(self: Component<T, Attrs>)
 		local fn: any = self.def[lifecycle.name]
 		if lifecycle == Lifecycles.OnInit then
 			fn()
+		elseif
+			lifecycle ~= Lifecycles.OnComponentInit
+			and lifecycle ~= Lifecycles.OnStart
+			and lifecycle ~= Lifecycles.OnDestroy
+		then
+			lifecycle:initBucket(self.config.loadOrder)
 		end
 	end
 	if self.config.tag then
