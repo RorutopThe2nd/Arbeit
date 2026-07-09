@@ -55,6 +55,10 @@ function Arbeit.work()
 							continue
 						end
 
+						if mod.config and mod.config.studioOnly == true and not RunService:IsStudio() then
+							return
+						end
+
 						Arbeit.register(decor.className, mod)
 
 						mod:init()
