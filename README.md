@@ -1,13 +1,8 @@
 # Arbeit
 
-**Arbeit** is a lightweight, pure-Luau framework for Roblox that mirrors the developer experience of [Flamework](https://flamework.dev/) (Roblox-TS) — without TypeScript. No transpiler, no decorator annotations: providers are just ModuleScripts returning a preset, and one loader call boots your game.
+Arbeit is a Luau framework for Roblox, inspired by [Flamework](https://flamework.dev/) from Roblox-TS. There is no transpiler involved: a provider is an ordinary ModuleScript that returns `Service.new(...)`, `Controller.new(...)`, or `Component.new(...)`, and `Arbeit.work()` discovers them at runtime and drives their lifecycles.
 
-- **Server-only** code → a `Service`
-- **Client-only** code → a `Controller`
-- **Tag-bound per-instance behaviour** → a `Component`
-- Lifecycle opt-in replaces `implements OnTick, ...`
-
-Everything ships in `--!strict` mode with full Luau typing.
+All code runs in `--!strict` Luau.
 
 ```luau
 -- src/server/main.server.luau
@@ -50,6 +45,21 @@ wally install
 
 Full setup (Rojo wiring into `ReplicatedStorage.Packages`) in [docs/install.md](docs/install.md).
 
+## Building from source
+
+The project maintains its toolchain with [Rokit](https://github.com/rojo-rbx/rokit). Install it once, then from the repo root:
+
+```sh
+rokit install     # wally 0.3.2, rojo 7.7.1, darklua 0.19.0
+wally install     # zero dependencies, but creates the Packages/ tree build.project.json expects
+darklua process src dist
+rojo build -o Arbeit.rbxlx
+```
+
+`build.project.json` compiles `dist/` into a place — it's for developing the library against its own demo scripts (`ECSService`, `ECSController`), not something you need as a consumer.
+
+The toolchain is defined in [`rokit.toml`](rokit.toml); adjust it with `rokit add <tool>`.
+
 ## Documentation
 
 | Doc | Description |
@@ -65,21 +75,3 @@ Full setup (Rojo wiring into `ReplicatedStorage.Packages`) in [docs/install.md](
 | [API: `LifecycleClass`](docs/api/lifecycleclass.md) | `subscribe`, `fireAll`, custom lifecycle primitives |
 | [API: types](docs/api/types.md) | `types.Partial<T>` + re-exported type surface |
 | [Flamework comparison](docs/flamework-comparison.md) | Side-by-side for Roblox-TS users |
-
-## Development
-
-This repo is a [Rojo](https://github.com/rojo-rbx/rojo) project (generated with Rojo 7.7.1). Source lives under [`src/`](src), with the framework itself in [`src/shared/Arbeit`](src/shared/Arbeit).
-
-To build the place from scratch:
-
-```bash
-rojo build -o "Arbeit.rbxlx"
-```
-
-Then open `Arbeit.rbxlx` in Roblox Studio and start the Rojo server:
-
-```bash
-rojo serve
-```
-
-For more help with Rojo, check out [the Rojo documentation](https://rojo.space/docs).
