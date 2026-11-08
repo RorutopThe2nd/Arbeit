@@ -1,4 +1,7 @@
-# Arbeit
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/arbeit_wordmark.svg" />
+  <img alt="arbeit." src="assets/arbeit_wordmark.png" width="360" />
+</picture>
 
 Arbeit is a Luau framework for Roblox, inspired by [Flamework](https://flamework.dev/) from Roblox-TS. There is no transpiler involved: a provider is an ordinary ModuleScript that returns `Service.new(...)`, `Controller.new(...)`, or `Component.new(...)`, and `Arbeit.work()` discovers them at runtime and drives their lifecycles.
 
