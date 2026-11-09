@@ -8,7 +8,7 @@ In `wally.toml`:
 
 ```toml
 [dependencies]
-Arbeit = "rorutop/arbeit@0.1.0"
+Arbeit = "rorutopthe2nd/arbeit@0.1.0"
 ```
 
 ### 2. Install

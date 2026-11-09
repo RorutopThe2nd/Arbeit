@@ -39,7 +39,7 @@ return Service.new({ Lifecycles.OnStart, Lifecycles.OnTick }, def)
 
 ```toml
 [dependencies]
-Arbeit = "rorutop/arbeit@0.1.0"
+Arbeit = "rorutopthe2nd/arbeit@0.1.0"
 ```
 
 ```sh
@@ -65,16 +65,16 @@ The toolchain is defined in [`rokit.toml`](rokit.toml); adjust it with `rokit ad
 
 ## Documentation
 
-| Doc | Description |
-|---|---|
-| [Installation](docs/install.md) | Installing via Wally + Rojo wiring |
-| [Getting started](docs/getting-started.md) | `addDir` + `work`, discovery rules, boot order |
-| [Singleton usage](docs/singleton.md) | The idiomatic single-file singleton pattern |
-| [Services](docs/providers/service.md) | Server providers — guide + API |
-| [Controllers](docs/providers/controller.md) | Client providers — guide + API |
-| [Components](docs/providers/component.md) | Tag-driven per-instance behaviour — guide + API |
-| [Lifecycles](docs/lifecycles.md) | Built-ins, scheduling semantics, custom lifecycles |
-| [API: `Arbeit` root](docs/api/arbeit.md) | `addDir`, `register`, `getRegistered`, `work` |
-| [API: `LifecycleClass`](docs/api/lifecycleclass.md) | `subscribe`, `fireAll`, custom lifecycle primitives |
-| [API: types](docs/api/types.md) | `types.Partial<T>` + re-exported type surface |
-| [Flamework comparison](docs/flamework-comparison.md) | Side-by-side for Roblox-TS users |
+| Doc                                                  | Description                                         |
+| ---------------------------------------------------- | --------------------------------------------------- |
+| [Installation](docs/install.md)                      | Installing via Wally + Rojo wiring                  |
+| [Getting started](docs/getting-started.md)           | `addDir` + `work`, discovery rules, boot order      |
+| [Singleton usage](docs/singleton.md)                 | The idiomatic single-file singleton pattern         |
+| [Services](docs/providers/service.md)                | Server providers — guide + API                      |
+| [Controllers](docs/providers/controller.md)          | Client providers — guide + API                      |
+| [Components](docs/providers/component.md)            | Tag-driven per-instance behaviour — guide + API     |
+| [Lifecycles](docs/lifecycles.md)                     | Built-ins, scheduling semantics, custom lifecycles  |
+| [API: `Arbeit` root](docs/api/arbeit.md)             | `addDir`, `register`, `getRegistered`, `work`       |
+| [API: `LifecycleClass`](docs/api/lifecycleclass.md)  | `subscribe`, `fireAll`, custom lifecycle primitives |
+| [API: types](docs/api/types.md)                      | `types.Partial<T>` + re-exported type surface       |
+| [Flamework comparison](docs/flamework-comparison.md) | Side-by-side for Roblox-TS users                    |
